@@ -9,6 +9,8 @@ from layout import layout
 logger = logging.getLogger(__name__)
 
 app = dash.Dash(__name__)
+server = app.server
+app.title = "Hybrid Image Playground"
 app.layout = layout
 add_callbacks(app)
 
