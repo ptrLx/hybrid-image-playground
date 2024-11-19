@@ -68,7 +68,7 @@ def add_callbacks(app):
     )
     def update_output_1_filtered(contents):
         if contents is not None:
-            return decode_and_process_image(contents, hi.apply_high_pass_filter)
+            return decode_and_process_image(contents, hi.apply_low_pass_filter)
         return html.Div()
 
     @app.callback(
@@ -77,7 +77,7 @@ def add_callbacks(app):
     )
     def update_output_2(contents):
         if contents is not None:
-            return decode_and_process_image(contents, hi.apply_low_pass_filter)
+            return decode_and_process_image(contents, hi.create_image_preview)
         return html.Div()
 
     @app.callback(
