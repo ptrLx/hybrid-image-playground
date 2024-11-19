@@ -4,8 +4,6 @@ from math import sqrt
 import cv2
 import numpy as np
 
-SIZE = 256
-
 
 class HybridImage:
     def __distance(self, point1, point2):
@@ -33,19 +31,19 @@ class HybridImage:
                 )
         return base
 
-    def __process_buffer(self, buffer):
+    def __process_buffer(self, buffer, image_size):
         # Convert the bytes to a NumPy array
         np_arr = np.frombuffer(buffer, np.uint8)
 
         # Decode the NumPy array to an image
         image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        image = cv2.resize(image, (SIZE, SIZE))
+        image = cv2.resize(image, (image_size, image_size))
 
         return image
 
-    def __create_filtered_image(self, buffer, cf=10, useHighPass=False):
-        image = self.__process_buffer(buffer)
+    def __create_filtered_image(self, buffer, image_size, cf=10, useHighPass=False):
+        image = self.__process_buffer(buffer, image_size)
 
         filterFunction = (
             self.__gaussian_high_pass if useHighPass else self.__gaussian_low_pass
@@ -68,17 +66,17 @@ class HybridImage:
 
         return np.abs(filteredImage)
 
-    def apply_low_pass_filter(self, buffer):
-        return self.__create_filtered_image(buffer)
+    def apply_low_pass_filter(self, buffer, image_size, cf):
+        return self.__create_filtered_image(buffer, image_size, cf)
 
-    def apply_high_pass_filter(self, buffer):
-        return self.__create_filtered_image(buffer, useHighPass=True)
+    def apply_high_pass_filter(self, buffer, image_size, cf):
+        return self.__create_filtered_image(buffer, image_size, cf, useHighPass=True)
 
-    def create_image_preview(self, buffer):
-        return self.__process_buffer(buffer)
+    def create_image_preview(self, buffer, image_size):
+        return self.__process_buffer(buffer, image_size)
 
-    def create_hybrid_image(self, image_lp, image_hp):
-        processed_lp = self.__process_buffer(image_lp)
-        processed_hp = self.__process_buffer(image_hp)
+    def create_hybrid_image(self, image_lp, image_hp, image_size):
+        processed_lp = self.__process_buffer(image_lp, image_size)
+        processed_hp = self.__process_buffer(image_hp, image_size)
 
         return np.abs(processed_hp) + np.abs(processed_lp)

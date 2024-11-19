@@ -58,6 +58,18 @@ def image_upload(i):
 layout = html.Div(
     [
         html.H1("Hybrid Image Playground"),
+        html.H3("Image Size"),
+        dcc.Dropdown(
+            [128, 256, 512, 1024, 2048],
+            256,
+            id="image-size",
+            clearable=False,
+            style={
+                "width": "200px",
+                "justifyContent": "center",
+                "margin": "auto",
+            },
+        ),
         html.H3("Upload Images"),
         html.Div(
             [
@@ -74,14 +86,23 @@ layout = html.Div(
         html.Div(
             [
                 html.H3(id="cf-slider-output"),
-                dcc.Slider(
-                    1,
-                    100,
-                    1,
-                    value=25,
-                    marks=None,
-                    id="cf-slider",
-                    tooltip={"placement": "bottom", "always_visible": True},
+                html.Div(
+                    [
+                        dcc.Slider(
+                            1,
+                            100,
+                            1,
+                            value=25,
+                            marks=None,
+                            id="cf-slider",
+                            tooltip={"placement": "bottom", "always_visible": True},
+                        ),
+                    ],
+                    style={
+                        "width": "600px",
+                        "justifyContent": "center",
+                        "margin": "auto",
+                    },
                 ),
             ],
         ),
