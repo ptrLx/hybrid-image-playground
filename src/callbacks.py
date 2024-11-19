@@ -103,3 +103,7 @@ def add_callbacks(app):
             )
         else:
             return html.Div()
+
+    @app.callback(Output("cf-slider-output", "children"), Input("cf-slider", "value"))
+    def update_output(value):
+        return f"Cutoff Frequency {value}"
