@@ -84,6 +84,19 @@ layout = html.Div(
                         "verticalAlign": "top",
                     },
                 ),
+                html.Div(
+                    [
+                        html.Div(
+                            id="output-image-hybrid",
+                            style={
+                                "width": "100%",
+                                "height": "100%",
+                                "textAlign": "center",
+                                "margin": "10px",
+                            },
+                        ),
+                    ]
+                ),
             ],
             style={"textAlign": "center"},
         ),
