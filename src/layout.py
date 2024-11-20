@@ -81,6 +81,18 @@ layout = html.Div(
                         "margin": "auto",
                     },
                 ),
+                html.H3("Filter Mode"),
+                dcc.Dropdown(
+                    [GAUSSIAN, CUT],
+                    CUT,
+                    id="filter-mode",
+                    clearable=False,
+                    style={
+                        "width": "200px",
+                        "justifyContent": "center",
+                        "margin": "auto",
+                    },
+                ),
                 html.H3(id="cf-slider-output"),
                 html.Div(
                     [
@@ -100,17 +112,25 @@ layout = html.Div(
                         "margin": "auto",
                     },
                 ),
-                html.H3("Filter Mode"),
-                dcc.Dropdown(
-                    [GAUSSIAN, CUT],
-                    CUT,
-                    id="filter-mode",
-                    clearable=False,
-                    style={
-                        "width": "200px",
-                        "justifyContent": "center",
-                        "margin": "auto",
-                    },
+                html.Div(
+                    [
+                        html.Div(
+                            id="filter-mask-1",
+                            style={
+                                "display": "inline-block",
+                                "width": "40%",
+                                "verticalAlign": "top",
+                            },
+                        ),
+                        html.Div(
+                            id="filter-mask-2",
+                            style={
+                                "display": "inline-block",
+                                "width": "40%",
+                                "verticalAlign": "top",
+                            },
+                        ),
+                    ],
                 ),
                 html.H3("Hybrid Image"),
                 html.Div(
