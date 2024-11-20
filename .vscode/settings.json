@@ -17,6 +17,7 @@
     "cSpell.words": [
         "chdir",
         "fftshift",
+        "fourier",
         "frombuffer",
         "gaussian",
         "gunicorn",
@@ -27,4 +28,5 @@
         "IMREAD",
         "pipenv"
     ],
+    "makefile.configureOnOpen": false,
 }

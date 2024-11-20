@@ -6,12 +6,17 @@ import numpy as np
 
 
 class HybridImage:
+    def __init__(self):
+        # enum of filter modes
+        self.CUT = "cut"
+        self.GAUSSIAN = "gaussian"
+
     def __distance(self, point1, point2):
         return sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
 
-    def __gaussian_low_pass(self, cf, imgShape):
-        base = np.zeros(imgShape[:2])
-        rows, cols = imgShape[:2]
+    def __gaussian_mask_lp(self, cf, img_shape):
+        base = np.zeros(img_shape[:2])
+        rows, cols = img_shape[:2]
         center = (rows / 2, cols / 2)
         for i in range(rows):
             for j in range(cols):
@@ -20,16 +25,20 @@ class HybridImage:
                 )
         return base
 
-    def __gaussian_high_pass(self, cf, imgShape):
-        base = np.zeros(imgShape[:2])
-        rows, cols = imgShape[:2]
+    def __gaussian_mask_hp(self, cf, img_shape):
+        return 1 - self.__gaussian_mask_lp(cf, img_shape)
+
+    def __cut_mask_lp(self, cf, img_shape):
+        mask = np.zeros(img_shape[:2])
+        rows, cols = img_shape[:2]
         center = (rows / 2, cols / 2)
         for i in range(rows):
             for j in range(cols):
-                base[i, j] = 1 - np.exp(
-                    -((self.__distance((i, j), center)) ** 2) / (2 * cf**2)
-                )
-        return base
+                mask[i, j] = 1 if self.__distance((i, j), center) < cf else 0
+        return mask
+
+    def __cut_mask_hp(self, cf, img_shape):
+        return 1 - self.__cut_mask_lp(cf, img_shape)
 
     def __process_buffer(self, buffer, image_size):
         # Convert the bytes to a NumPy array
@@ -42,35 +51,64 @@ class HybridImage:
 
         return image
 
-    def __create_filtered_image(self, buffer, image_size, cf=10, useHighPass=False):
+    def __create_filtered_image(
+        self, buffer, image_size, filter_mode, cf=10, use_high_pass=False
+    ):
         image = self.__process_buffer(buffer, image_size)
-
-        filterFunction = (
-            self.__gaussian_high_pass if useHighPass else self.__gaussian_low_pass
-        )
 
         # Fourier Transform of the image
         ft = np.fft.fft2(image)
 
-        # Apply Centre Shifting
-        center = np.fft.fftshift(ft)
+        # Apply Center Shifting (Shift the zero-frequency component to the center of the spectrum)
+        ft = np.fft.fftshift(ft)
 
         # Apply Filter
-        filteredCenter = center * filterFunction(cf, image.shape)
+        if filter_mode == self.GAUSSIAN:
+            filter_mask = (
+                self.__gaussian_mask_hp(cf, image.shape)
+                if use_high_pass
+                else self.__gaussian_mask_lp(cf, image.shape)
+            )
+        else:
+            filter_mask = (
+                self.__cut_mask_hp(cf, image.shape)
+                if use_high_pass
+                else self.__cut_mask_lp(cf, image.shape)
+            )
+
+        filtered_center = ft * filter_mask
 
         # Extract frequency component
-        filteredFT = np.fft.ifftshift(filteredCenter)
+        filtered_ft = np.fft.ifftshift(filtered_center)
 
         # Get image using Inverse FFT
-        filteredImage = np.fft.ifft2(filteredFT)
+        filtered_image = np.fft.ifft2(filtered_center)
 
-        return np.abs(filteredImage)
+        return (
+            image,
+            np.abs(filter_mask),
+            np.abs(ft),
+            np.abs(filtered_center),
+            np.abs(filtered_image),
+        )
 
-    def apply_low_pass_filter(self, buffer, image_size, cf):
-        return self.__create_filtered_image(buffer, image_size, cf)
+    def apply_low_pass_filter(self, buffer, image_size, filter_mode, cf):
+        return self.__create_filtered_image(
+            buffer=buffer,
+            image_size=image_size,
+            filter_mode=filter_mode,
+            cf=cf,
+            use_high_pass=False,
+        )
 
-    def apply_high_pass_filter(self, buffer, image_size, cf):
-        return self.__create_filtered_image(buffer, image_size, cf, useHighPass=True)
+    def apply_high_pass_filter(self, buffer, image_size, filter_mode, cf):
+        return self.__create_filtered_image(
+            buffer=buffer,
+            image_size=image_size,
+            filter_mode=filter_mode,
+            cf=cf,
+            use_high_pass=True,
+        )
 
     def create_image_preview(self, buffer, image_size):
         return self.__process_buffer(buffer, image_size)

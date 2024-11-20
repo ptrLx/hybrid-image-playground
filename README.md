@@ -1,5 +1,7 @@
 # Hybrid Image Playground
 
+> Play with hybrid images
+
 ## Setup
 
 ###### Requirements
