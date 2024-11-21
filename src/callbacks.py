@@ -66,9 +66,9 @@ def __update_output_images(contents, image_size, cf, filter_mode, use_high_pass=
                                 src=__encode_image(original_image_bw),
                                 style={"width": "100%"},
                             ),
-                            html.P("Image (scaled, bw)"),
+                            html.P("Scaled Image (bw)"),
                         ],
-                        style={"width": "30%", "margin": "10px"},
+                        style={"width": "100%"},
                     ),
                     html.Div(
                         [
@@ -78,7 +78,7 @@ def __update_output_images(contents, image_size, cf, filter_mode, use_high_pass=
                             ),
                             html.P("Filtered FT"),
                         ],
-                        style={"width": "30%", "margin": "10px"},
+                        style={"width": "100%"},
                     ),
                     html.Div(
                         [
@@ -88,24 +88,26 @@ def __update_output_images(contents, image_size, cf, filter_mode, use_high_pass=
                             ),
                             html.P("Filtered Image"),
                         ],
-                        style={"width": "30%", "margin": "10px"},
+                        style={"width": "100%"},
                     ),
                 ],
                 style={
                     "display": "flex",
-                    "justifyContent": "space-evenly",
-                    "margin": "10px",
+                    "gap": "10px",
+                    "width": "100%",
                 },
             ),
             html.Div(
                 [
                     html.Img(
                         src=__encode_image(filter_mask),
-                        style={"width": "30%"},
+                        style={"width": "100%"},
                     ),
                     html.P(f"{'High' if use_high_pass else 'Low'} Pass Filter Mask"),
                 ],
                 style={
+                    "display": "flex",
+                    "flexDirection": "column",
                     "width": "100%",
                 },
             ),
