@@ -172,7 +172,3 @@ def add_callbacks(app):
         return html.Img(
             src=__encode_image(image), style={"width": "45%", "margin": "10px"}
         )
-
-    @app.callback(Output("cf-slider-output", "children"), Input("cf-slider", "value"))
-    def update_output(value):
-        return f"Cutoff Frequency {value}"

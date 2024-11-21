@@ -53,7 +53,91 @@ def image_upload(i):
 
 layout = html.Div(
     [
-        html.H1("Hybrid Image Playground"),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H1("Hybrid Image Playground"),
+                        html.Div(
+                            [
+                                html.Div(
+                                    [
+                                        html.H3("Image Size"),
+                                        dcc.Dropdown(
+                                            [128, 256, 512, 1024, 2048],
+                                            256,
+                                            id="image-size",
+                                            clearable=False,
+                                            style={
+                                                "width": "100px",
+                                                "justifyContent": "center",
+                                            },
+                                        ),
+                                    ],
+                                    style={"margin": "10px"},
+                                ),
+                                html.Div(
+                                    [
+                                        html.H3("Filter Mode"),
+                                        dcc.Dropdown(
+                                            [GAUSSIAN, CUT],
+                                            CUT,
+                                            id="filter-mode",
+                                            clearable=False,
+                                            style={
+                                                "width": "200px",
+                                                "justifyContent": "center",
+                                            },
+                                        ),
+                                    ],
+                                    style={"margin": "10px"},
+                                ),
+                                html.Div(
+                                    [
+                                        html.H3("Cut-off Frequency"),
+                                        html.Div(
+                                            [
+                                                dcc.Slider(
+                                                    1,
+                                                    100,
+                                                    1,
+                                                    value=25,
+                                                    marks=None,
+                                                    id="cf-slider",
+                                                    tooltip={
+                                                        "placement": "bottom",
+                                                        "always_visible": True,
+                                                    },
+                                                ),
+                                            ],
+                                            style={
+                                                "width": "600px",
+                                                "justifyContent": "center",
+                                            },
+                                        ),
+                                    ]
+                                ),
+                            ],
+                            style={
+                                "display": "flex",
+                                "align-items": "left",
+                                "justify-content": "left",
+                                "flex-wrap": "wrap",
+                            },
+                        ),
+                    ],
+                    style={
+                        "display": "flex",
+                        "align-items": "center",
+                        "justify-content": "space-between",
+                        "padding": "10px",
+                        "margin": "10px",
+                        "background-color": "#f9f9f9",
+                        "flex-wrap": "wrap",
+                    },
+                )
+            ]
+        ),
         html.H3("Upload Images"),
         html.Div(
             [
@@ -69,49 +153,6 @@ layout = html.Div(
         ),
         dcc.Loading(
             [
-                html.H3("Image Size"),
-                dcc.Dropdown(
-                    [128, 256, 512, 1024, 2048],
-                    256,
-                    id="image-size",
-                    clearable=False,
-                    style={
-                        "width": "200px",
-                        "justifyContent": "center",
-                        "margin": "auto",
-                    },
-                ),
-                html.H3("Filter Mode"),
-                dcc.Dropdown(
-                    [GAUSSIAN, CUT],
-                    CUT,
-                    id="filter-mode",
-                    clearable=False,
-                    style={
-                        "width": "200px",
-                        "justifyContent": "center",
-                        "margin": "auto",
-                    },
-                ),
-                html.H3(id="cf-slider-output"),
-                html.Div(
-                    [
-                        dcc.Slider(
-                            1,
-                            100,
-                            1,
-                            value=25,
-                            marks=None,
-                            id="cf-slider",
-                            tooltip={"placement": "bottom", "always_visible": True},
-                        ),
-                    ],
-                    style={
-                        "width": "600px",
-                        "justifyContent": "center",
-                        "margin": "auto",
-                    },
-                ),
                 html.Div(
                     [
                         html.Div(
