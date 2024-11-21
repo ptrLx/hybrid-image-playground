@@ -23,6 +23,7 @@ def image_upload(i):
                         ],
                         style={
                             "width": "100%",
+                            "minWidth": "300px",
                             "height": "60px",
                             "lineHeight": "60px",
                             "borderWidth": "5px",
@@ -30,6 +31,7 @@ def image_upload(i):
                             "borderRadius": "20px",
                             "textAlign": "center",
                             "backgroundColor": "#f0f0f0",
+                            "boxSizing": "border-box",
                         },
                     ),
                     html.Div(
@@ -45,7 +47,6 @@ def image_upload(i):
         ],
         style={
             "display": "inline-block",
-            "width": "40%",
             "verticalAlign": "top",
         },
     )
@@ -53,6 +54,7 @@ def image_upload(i):
 
 layout = html.Div(
     [
+        # Top bar
         html.Div(
             [
                 html.Div(
@@ -69,12 +71,11 @@ layout = html.Div(
                                             id="image-size",
                                             clearable=False,
                                             style={
-                                                "width": "100px",
-                                                "justifyContent": "center",
+                                                "width": "auto",  # Set width to auto to fit text
+                                                "minWidth": "100px",  # Optional: Set a minimum width if needed
                                             },
                                         ),
                                     ],
-                                    style={"margin": "10px"},
                                 ),
                                 html.Div(
                                     [
@@ -85,12 +86,11 @@ layout = html.Div(
                                             id="filter-mode",
                                             clearable=False,
                                             style={
-                                                "width": "200px",
-                                                "justifyContent": "center",
+                                                "width": "auto",  # Set width to auto to fit text
+                                                "minWidth": "150px",  # Optional: Set a minimum width if needed
                                             },
                                         ),
                                     ],
-                                    style={"margin": "10px"},
                                 ),
                                 html.Div(
                                     [
@@ -111,8 +111,8 @@ layout = html.Div(
                                                 ),
                                             ],
                                             style={
-                                                "width": "600px",
-                                                "justifyContent": "center",
+                                                "width": "auto",
+                                                "minWidth": "300px",
                                             },
                                         ),
                                     ]
@@ -123,6 +123,7 @@ layout = html.Div(
                                 "align-items": "left",
                                 "justify-content": "left",
                                 "flex-wrap": "wrap",
+                                "gap": "10px",
                             },
                         ),
                     ],
@@ -130,79 +131,102 @@ layout = html.Div(
                         "display": "flex",
                         "align-items": "center",
                         "justify-content": "space-between",
-                        "padding": "10px",
-                        "margin": "10px",
-                        "background-color": "#f9f9f9",
+                        "background-color": "#d3d3d3",
                         "flex-wrap": "wrap",
+                        "padding": "10px",
                     },
                 )
             ]
         ),
-        html.H3("Upload Images"),
+        # Content
         html.Div(
             [
-                image_upload(1),
-                image_upload(2),
-            ],
-            style={
-                "display": "flex",
-                "justifyContent": "space-evenly",
-                "width": "100%",
-                "verticalAlign": "top",
-            },
-        ),
-        dcc.Loading(
-            [
                 html.Div(
                     [
+                        html.H3("Upload Images"),
                         html.Div(
-                            id="filter-mask-1",
+                            [
+                                image_upload(1),
+                                image_upload(2),
+                            ],
                             style={
-                                "display": "inline-block",
-                                "width": "40%",
-                                "verticalAlign": "top",
-                            },
-                        ),
-                        html.Div(
-                            id="filter-mask-2",
-                            style={
-                                "display": "inline-block",
-                                "width": "40%",
-                                "verticalAlign": "top",
-                            },
-                        ),
-                    ],
-                ),
-                html.H3("Hybrid Image"),
-                html.Div(
-                    [
-                        html.Div(
-                            id="output-image-hybrid",
-                            style={
-                                "width": "100%",
-                                "height": "100%",
-                                "textAlign": "center",
-                                "margin": "10px",
                                 "display": "flex",
-                                "justify-content": "center",
+                                "flexDirection": "column",
+                                "width": "100%",
+                                "verticalAlign": "top",
+                                "gap": "10px",
                             },
                         ),
                     ],
                     style={
-                        "display": "inline-block",
-                        "width": "100%",
-                        "verticalAlign": "top",
+                        "width": "50%",
+                        "boxSizing": "border-box",
+                    },
+                ),
+                html.Div(
+                    dcc.Loading(
+                        [
+                            html.H3("Filter Masks"),
+                            html.Div(
+                                [
+                                    html.Div(
+                                        id="filter-mask-1",
+                                        style={
+                                            "display": "inline-block",
+                                            "width": "40%",
+                                            "verticalAlign": "top",
+                                        },
+                                    ),
+                                    html.Div(
+                                        id="filter-mask-2",
+                                        style={
+                                            "display": "inline-block",
+                                            "width": "40%",
+                                            "verticalAlign": "top",
+                                        },
+                                    ),
+                                ],
+                            ),
+                            html.H3("Hybrid Image"),
+                            html.Div(
+                                [
+                                    html.Div(
+                                        id="output-image-hybrid",
+                                        style={
+                                            "width": "100%",
+                                            "height": "100%",
+                                            "textAlign": "center",
+                                            "display": "flex",
+                                            "justify-content": "center",
+                                        },
+                                    ),
+                                ],
+                                style={
+                                    "display": "inline-block",
+                                    "width": "100%",
+                                    "verticalAlign": "top",
+                                },
+                            ),
+                        ],
+                        overlay_style={
+                            "visibility": "visible",
+                            "filter": "blur(7px)",
+                        },
+                        type="circle",
+                    ),
+                    style={
+                        "width": "50%",
+                        "boxSizing": "border-box",
                     },
                 ),
             ],
-            overlay_style={
-                "visibility": "visible",
-                "filter": "blur(7px)",
+            style={
+                "display": "flex",
+                "width": "100%",
+                "gap": "25px",
+                "padding": "20px",
             },
-            type="circle",
         ),
     ],
-    style={
-        "textAlign": "center",
-    },
+    style={"textAlign": "center"},
 )
