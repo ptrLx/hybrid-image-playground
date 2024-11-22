@@ -37,7 +37,9 @@ def __encode_image(image):
     return f"data:image/png;base64,{output}"
 
 
-def __update_output_images(contents, image_size, cf, filter_mode, use_high_pass=False):
+def __update_output_images(
+    contents, image_size, cf, is_scale_independent_cf, filter_mode, use_high_pass=False
+):
     if contents is not None:
         filter_function = (
             hi.apply_high_pass_filter if use_high_pass else hi.apply_low_pass_filter
@@ -45,17 +47,26 @@ def __update_output_images(contents, image_size, cf, filter_mode, use_high_pass=
 
         decoded = __decode_image(contents)
         original_image_bw, filter_mask, ft, filtered_center, filtered_image = (
-            filter_function(decoded, image_size, __get_filter_mode(filter_mode), cf)
+            filter_function(
+                decoded,
+                image_size,
+                __get_filter_mode(filter_mode),
+                cf,
+                is_scale_independent_cf,
+            )
         )
 
         filter_mask *= 255  # scale up the mask to 255 grayscale values
 
-        # Use numpy to set values bigger than 2048 to 2048 in filtered_center (for visualization of the filtered Fourier Transform)
-        filtered_center[filtered_center > 2047] = 2047
+        # Scale Fourier Transform brightness down
+        filtered_center /= 512
 
-        # Rescale the filtered_center to 0-255
-        filtered_center = cv2.normalize(filtered_center, None, 0, 255, cv2.NORM_MINMAX)
-        # filtered_center /= 8  # scale down the filtered_center to 0-255 grayscale values
+        # * Instead of scaling the brightness of the Fourier Transform, we can set the values bigger than 2048 to 2048
+        # # Use numpy to set values bigger than 2048 to 2048 in filtered_center (for visualization of the filtered Fourier Transform)
+        # filtered_center[filtered_center > 2047] = 2047
+        # # Rescale the filtered_center to 0-255
+        # filtered_center = cv2.normalize(filtered_center, None, 0, 255, cv2.NORM_MINMAX)
+        # # filtered_center /= 8  # scale down the filtered_center to 0-255 grayscale values
 
         return (
             html.Div(
@@ -123,11 +134,21 @@ def add_callbacks(app):
             Input("upload-image-1", "contents"),
             Input("image-size", "value"),
             Input("cf-slider", "value"),
+            Input("is-scale-independent-cf", "value"),
             Input("filter-mode", "value"),
         ],
     )
-    def update_output_images_1(contents, image_size, cf, filter_mode):
-        return __update_output_images(contents, image_size, cf, filter_mode)
+    def update_output_images_1(
+        contents, image_size, cf, is_scale_independent_cf_arr, filter_mode
+    ):
+        is_scale_independent_cf = "scale-independent" in is_scale_independent_cf_arr
+        return __update_output_images(
+            contents,
+            image_size,
+            cf,
+            is_scale_independent_cf,
+            filter_mode,
+        )
 
     @app.callback(
         [Output("output-images-2", "children"), Output("filter-mask-2", "children")],
@@ -135,12 +156,21 @@ def add_callbacks(app):
             Input("upload-image-2", "contents"),
             Input("image-size", "value"),
             Input("cf-slider", "value"),
+            Input("is-scale-independent-cf", "value"),
             Input("filter-mode", "value"),
         ],
     )
-    def update_output_images_2(contents, image_size, cf, filter_mode):
+    def update_output_images_2(
+        contents, image_size, cf, is_scale_independent_cf_arr, filter_mode
+    ):
+        is_scale_independent_cf = "scale-independent" in is_scale_independent_cf_arr
         return __update_output_images(
-            contents, image_size, cf, filter_mode, use_high_pass=True
+            contents,
+            image_size,
+            cf,
+            is_scale_independent_cf,
+            filter_mode,
+            use_high_pass=True,
         )
 
     @app.callback(
@@ -152,25 +182,29 @@ def add_callbacks(app):
         ],
     )
     def update_output_hybrid(output_images1, output_images2, image_size):
-        if (
-            output_images1["props"]["children"] is None
-            or output_images2["props"]["children"] is None
-        ):
+        if output_images1 is None or output_images2 is None:
             return html.Div()
 
-        decoded1 = __decode_image(
-            output_images1["props"]["children"][2]["props"]["children"][0]["props"][
-                "src"
-            ]
-        )
-        decoded2 = __decode_image(
-            output_images2["props"]["children"][2]["props"]["children"][0]["props"][
-                "src"
-            ]
-        )
+        children1 = output_images1.get("props").get("children")
+        children2 = output_images2.get("props").get("children")
+
+        if children1 is None or children2 is None:
+            return html.Div()
+
+        decoded1 = __decode_image(children1[2]["props"]["children"][0]["props"]["src"])
+        decoded2 = __decode_image(children2[2]["props"]["children"][0]["props"]["src"])
 
         image = hi.create_hybrid_image(decoded1, decoded2, image_size)
 
         return html.Img(
             src=__encode_image(image), style={"width": "45%", "margin": "10px"}
         )
+
+    @app.callback(
+        Output("cf-scale-info", "children"),
+        [Input("is-scale-independent-cf", "value")],
+    )
+    def update_cf_scale_info(is_scale_independent_cf):
+        if "scale-independent" in is_scale_independent_cf:
+            return "Mask radius is determined by the cutoff frequency but scaled with the image size"
+        return "Mask radius has a fixed pixel size determined by the cutoff frequency"

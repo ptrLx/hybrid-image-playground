@@ -52,9 +52,19 @@ class HybridImage:
         return image
 
     def __create_filtered_image(
-        self, buffer, image_size, filter_mode, cf=10, use_high_pass=False
+        self,
+        buffer,
+        image_size,
+        filter_mode,
+        cf=10,
+        use_high_pass=False,
+        is_scale_independent_cf=False,
     ):
         image = self.__process_buffer(buffer, image_size)
+
+        # Resize the cutoff frequency
+        if is_scale_independent_cf:
+            cf *= image_size / 128
 
         # Fourier Transform of the image
         ft = np.fft.fft2(image)
@@ -92,22 +102,28 @@ class HybridImage:
             np.abs(filtered_image),
         )
 
-    def apply_low_pass_filter(self, buffer, image_size, filter_mode, cf):
+    def apply_low_pass_filter(
+        self, buffer, image_size, filter_mode, cf, is_scale_independent_cf
+    ):
         return self.__create_filtered_image(
             buffer=buffer,
             image_size=image_size,
             filter_mode=filter_mode,
             cf=cf,
             use_high_pass=False,
+            is_scale_independent_cf=is_scale_independent_cf,
         )
 
-    def apply_high_pass_filter(self, buffer, image_size, filter_mode, cf):
+    def apply_high_pass_filter(
+        self, buffer, image_size, filter_mode, cf, is_scale_independent_cf
+    ):
         return self.__create_filtered_image(
             buffer=buffer,
             image_size=image_size,
             filter_mode=filter_mode,
             cf=cf,
             use_high_pass=True,
+            is_scale_independent_cf=is_scale_independent_cf,
         )
 
     def create_image_preview(self, buffer, image_size):

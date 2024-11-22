@@ -1,6 +1,7 @@
 import logging
 
 import dash
+import dash_bootstrap_components as dbc
 
 from args import ArgParser
 from callbacks import add_callbacks
@@ -8,7 +9,7 @@ from layout import layout
 
 logger = logging.getLogger(__name__)
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 app.title = "Hybrid Image Playground"
 app.layout = layout

@@ -1,3 +1,4 @@
+import dash_bootstrap_components as dbc
 from dash import dcc, html
 
 # enum of filter modes
@@ -70,8 +71,8 @@ __filter_controls = html.Div(
                 ),
             ],
             style={
-                "width": "auto",  # Set width to auto to fit text
-                "minWidth": "100px",  # Optional: Set a minimum width if needed
+                "width": "auto",
+                "minWidth": "100px",
             },
         ),
         html.Div(
@@ -85,8 +86,8 @@ __filter_controls = html.Div(
                 ),
             ],
             style={
-                "width": "auto",  # Set width to auto to fit text
-                "minWidth": "150px",  # Optional: Set a minimum width if needed
+                "width": "auto",
+                "minWidth": "150px",
             },
         ),
         html.Div(
@@ -111,6 +112,17 @@ __filter_controls = html.Div(
                         "width": "auto",
                         "minWidth": "300px",
                     },
+                ),
+                dcc.Checklist(
+                    [
+                        {
+                            "label": "Scale independent",
+                            "value": "scale-independent",
+                        }
+                    ],
+                    value=[],
+                    id="is-scale-independent-cf",
+                    inline=True,
                 ),
             ]
         ),
@@ -173,6 +185,7 @@ __hybrid_image_section = html.Div(
                     ),
                 ],
             ),
+            html.P(id="cf-scale-info"),
             html.H3("Hybrid Image"),
             html.Div(
                 [
