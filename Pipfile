@@ -10,6 +10,7 @@ dash-html-components = "*"
 opencv_python = "*"
 numpy = "*"
 gunicorn = "*"
+dash-bootstrap-components = "*"
 
 [dev-packages]
 pylint = "*"

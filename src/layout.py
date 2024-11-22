@@ -17,7 +17,7 @@ def __image_upload(i):
                                 dcc.Upload(
                                     id=f"upload-image-{i}",
                                     children=html.A(
-                                        f"Select Image {i} ({'LP' if i == 1 else 'HP'})"
+                                        f"Select Image for {'Low' if i == 1 else 'High'} Frequency Portion"
                                     ),
                                     multiple=False,
                                     accept="image/*",
@@ -30,7 +30,6 @@ def __image_upload(i):
                                 "borderStyle": "dashed",
                                 "borderRadius": "20px",
                                 "textAlign": "center",
-                                "backgroundColor": "#f0f0f0",
                                 "boxSizing": "border-box",
                             },
                         ),
@@ -58,16 +57,17 @@ def __image_upload(i):
     )
 
 
-__filter_controls = html.Div(
+__filter_controls = dbc.Row(
     [
-        html.Div(
+        dbc.Col(
             [
-                html.H3("Image Size"),
+                html.H6("Image Size"),
                 dcc.Dropdown(
                     [128, 256, 512, 1024, 2048],
                     256,
                     id="image-size",
                     clearable=False,
+                    style={"color": "black"},
                 ),
             ],
             style={
@@ -75,14 +75,15 @@ __filter_controls = html.Div(
                 "minWidth": "100px",
             },
         ),
-        html.Div(
+        dbc.Col(
             [
-                html.H3("Filter Mode"),
+                html.H6("Filter Mode"),
                 dcc.Dropdown(
                     [GAUSSIAN, CUT],
                     CUT,
                     id="filter-mode",
                     clearable=False,
+                    style={"color": "black"},
                 ),
             ],
             style={
@@ -90,9 +91,9 @@ __filter_controls = html.Div(
                 "minWidth": "150px",
             },
         ),
-        html.Div(
+        dbc.Col(
             [
-                html.H3("Cut-off Frequency"),
+                html.H6("Cut-off Frequency"),
                 html.Div(
                     [
                         dcc.Slider(
@@ -111,27 +112,38 @@ __filter_controls = html.Div(
                     style={
                         "width": "auto",
                         "minWidth": "300px",
+                        "padding-bottom": "10px",
                     },
                 ),
-                dcc.Checklist(
+                html.Div(
                     [
-                        {
-                            "label": "Scale independent",
-                            "value": "scale-independent",
-                        }
+                        dbc.Checklist(
+                            [
+                                {
+                                    "label": " Scale Independent",
+                                    "value": "scale-independent",
+                                }
+                            ],
+                            value=[],
+                            id="is-scale-independent-cf",
+                            inline=True,
+                        ),
+                        dbc.Tooltip(
+                            "By default, the mask radius has a fixed pixel size determined by the cutoff frequency."
+                            " If set, the mask radius is determined by the cutoff frequency, but scaled with the image size.",
+                            target="is-scale-independent-cf",
+                            placement="bottom",
+                        ),
                     ],
-                    value=[],
-                    id="is-scale-independent-cf",
-                    inline=True,
+                    style={"textDecoration": "underline", "color": "white"},
                 ),
-            ]
+            ],
         ),
     ],
+    className="g-0 ms-auto mt-3 mt-md-0",
+    # align="center",
     style={
-        "display": "flex",
-        "align-items": "left",
-        "justify-content": "left",
-        "flex-wrap": "wrap",
+        "justify-content": "space-evenly",
         "gap": "10px",
     },
 )
@@ -185,7 +197,6 @@ __hybrid_image_section = html.Div(
                     ),
                 ],
             ),
-            html.P(id="cf-scale-info"),
             html.H3("Hybrid Image"),
             html.Div(
                 [
@@ -222,17 +233,26 @@ __hybrid_image_section = html.Div(
 
 layout = html.Div(
     [
-        # Top bar
-        html.Div(
-            [html.H1("Hybrid Image Playground"), __filter_controls],
-            style={
-                "display": "flex",
-                "justify-content": "space-between",
-                "background-color": "#d3d3d3",
-                "flex-wrap": "wrap",
-                "padding": "10px",
-                "textAlign": "left",
-            },
+        dbc.Navbar(
+            dbc.Container(
+                [
+                    html.A(
+                        dbc.NavbarBrand("Hybrid Image Playground", className="ms-2"),
+                        href="https://github.com/ptrLx/hybrid-image-playground/",
+                        style={"textDecoration": "none"},
+                    ),
+                    dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+                    dbc.Collapse(
+                        __filter_controls,
+                        id="navbar-collapse",
+                        is_open=False,
+                        navbar=True,
+                    ),
+                ],
+            ),
+            color="dark",
+            sticky="top",
+            dark=True,
         ),
         # Content
         html.Div(
@@ -245,7 +265,10 @@ layout = html.Div(
                 "flexWrap": "wrap",
                 "justify-content": "space-evenly",
                 "width": "100%",
+                "paddingTop": "20px",
                 "gap": "25px",
+                "paddingLeft": "10px",
+                "paddingRight": "10px",
             },
         ),
     ],

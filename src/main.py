@@ -9,7 +9,7 @@ from layout import layout
 
 logger = logging.getLogger(__name__)
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 server = app.server
 app.title = "Hybrid Image Playground"
 app.layout = layout

@@ -3,7 +3,7 @@ import logging
 
 import cv2
 from dash import html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from hybrid_image import HybridImage
 
@@ -201,10 +201,11 @@ def add_callbacks(app):
         )
 
     @app.callback(
-        Output("cf-scale-info", "children"),
-        [Input("is-scale-independent-cf", "value")],
+        Output("navbar-collapse", "is_open"),
+        [Input("navbar-toggler", "n_clicks")],
+        [State("navbar-collapse", "is_open")],
     )
-    def update_cf_scale_info(is_scale_independent_cf):
-        if "scale-independent" in is_scale_independent_cf:
-            return "Mask radius is determined by the cutoff frequency but scaled with the image size"
-        return "Mask radius has a fixed pixel size determined by the cutoff frequency"
+    def toggle_navbar_collapse(n, is_open):
+        if n:
+            return not is_open
+        return is_open
