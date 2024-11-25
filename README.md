@@ -11,7 +11,16 @@
 
 ![](assets/2024-11-22-00-40-54.png)
 
-## Setup
+## Run the docker image
+
+```bash
+docker pull ptrlx/hybrid-image-playground
+docker run -it --rm -p 8080:80 ptrlx/hybrid-image-playground
+```
+
+* Open your browser and go to <http://localhost:8080>
+
+## Installation
 
 ###### Requirements
 
@@ -26,15 +35,6 @@ pipenv run python src/main.py
 ```
 
 * Open your browser and go to <http://localhost:8300>
-
-###### Run the docker image
-
-```bash
-docker pull ptrlx/hybrid-image-playground
-docker run -it --rm -p 8080:80 ptrlx/hybrid-image-playground
-```
-
-* Open your browser and go to <http://localhost:8080>
 
 ## Preprocessing - resizing and alignment
 

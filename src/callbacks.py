@@ -77,7 +77,7 @@ def __update_output_images(
                                 src=__encode_image(original_image_bw),
                                 style={"width": "100%"},
                             ),
-                            html.P("Scaled Image (bw)"),
+                            html.P("Scaled Image (black & white)"),
                         ],
                         style={"width": "100%"},
                     ),
@@ -106,6 +106,7 @@ def __update_output_images(
                     "display": "flex",
                     "gap": "10px",
                     "width": "100%",
+                    "padding": "10px",
                 },
             ),
             html.Div(
@@ -196,9 +197,7 @@ def add_callbacks(app):
 
         image = hi.create_hybrid_image(decoded1, decoded2, image_size)
 
-        return html.Img(
-            src=__encode_image(image), style={"width": "45%", "margin": "10px"}
-        )
+        return html.Img(src=__encode_image(image), style={"width": "100%"})
 
     @app.callback(
         Output("navbar-collapse", "is_open"),

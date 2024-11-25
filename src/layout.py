@@ -2,8 +2,13 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 
 # enum of filter modes
-GAUSSIAN = "Gaussian"
 CUT = "Circular cut"
+GAUSSIAN = "Gaussian"
+
+FILTER_MASKS = [
+    CUT,
+    GAUSSIAN,
+]
 
 
 def __image_upload(i):
@@ -12,35 +17,34 @@ def __image_upload(i):
             dcc.Loading(
                 html.Div(
                     [
-                        html.Div(
-                            [
-                                dcc.Upload(
-                                    id=f"upload-image-{i}",
-                                    children=html.A(
-                                        f"Select Image for {'Low' if i == 1 else 'High'} Frequency Portion"
-                                    ),
-                                    multiple=False,
-                                    accept="image/*",
-                                ),
-                            ],
-                            style={
-                                "height": "60px",
-                                "lineHeight": "60px",
-                                "borderWidth": "5px",
-                                "borderStyle": "dashed",
-                                "borderRadius": "20px",
-                                "textAlign": "center",
-                                "boxSizing": "border-box",
-                            },
+                        dcc.Upload(
+                            id=f"upload-image-{i}",
+                            children=html.A(
+                                f"Select Image for {'Low' if i == 1 else 'High'} Frequency Portion",
+                                style={
+                                    "padding": "10px",
+                                    "fontWeight": "bold",
+                                    "height": "60px",
+                                    "display": "flex",
+                                    "justifyContent": "center",
+                                    "alignItems": "center",
+                                    "textAlign": "center",
+                                },
+                            ),
+                            multiple=False,
+                            accept="image/*",
                         ),
                         html.Div(
                             id=f"output-images-{i}",
                         ),
                     ],
                     style={
+                        "borderWidth": "5px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "20px",
+                        "boxSizing": "border-box",
                         "display": "flex",
                         "flexDirection": "column",
-                        "gap": "10px",
                     },
                 ),
                 overlay_style={
@@ -79,7 +83,7 @@ __filter_controls = dbc.Row(
             [
                 html.H6("Filter Mode"),
                 dcc.Dropdown(
-                    [GAUSSIAN, CUT],
+                    FILTER_MASKS,
                     CUT,
                     id="filter-mode",
                     clearable=False,
@@ -129,8 +133,8 @@ __filter_controls = dbc.Row(
                             inline=True,
                         ),
                         dbc.Tooltip(
-                            "By default, the mask radius has a fixed pixel size determined by the cutoff frequency."
-                            " If set, the mask radius is determined by the cutoff frequency, but scaled with the image size.",
+                            "By default, the mask radius has a fixed pixel size determined by the cutoff frequency (cycle/degree)."
+                            " If set, the mask radius is determined by the cutoff frequency, but scaled with the image size (cycle/image).",
                             target="is-scale-independent-cf",
                             placement="bottom",
                         ),
@@ -182,20 +186,26 @@ __hybrid_image_section = html.Div(
                     html.Div(
                         id="filter-mask-1",
                         style={
-                            "display": "inline-block",
-                            "width": "40%",
-                            "verticalAlign": "top",
+                            "display": "flex",
+                            "flexDirection": "column",
+                            "width": "100%",
                         },
                     ),
                     html.Div(
                         id="filter-mask-2",
                         style={
-                            "display": "inline-block",
-                            "width": "40%",
-                            "verticalAlign": "top",
+                            "display": "flex",
+                            "flexDirection": "column",
+                            "width": "100%",
                         },
                     ),
                 ],
+                style={
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "justifyContent": "space-evenly",
+                    "gap": "10px",
+                },
             ),
             html.H3("Hybrid Image"),
             html.Div(
@@ -237,7 +247,7 @@ layout = html.Div(
             dbc.Container(
                 [
                     html.A(
-                        dbc.NavbarBrand("Hybrid Image Playground", className="ms-2"),
+                        dbc.NavbarBrand("Hybrid Image Playground", className="ms-1"),
                         href="https://github.com/ptrLx/hybrid-image-playground/",
                         style={"textDecoration": "none"},
                     ),
@@ -265,10 +275,8 @@ layout = html.Div(
                 "flexWrap": "wrap",
                 "justify-content": "space-evenly",
                 "width": "100%",
-                "paddingTop": "20px",
+                "padding": "10px",
                 "gap": "25px",
-                "paddingLeft": "10px",
-                "paddingRight": "10px",
             },
         ),
     ],
