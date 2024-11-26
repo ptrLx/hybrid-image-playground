@@ -4,18 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dash = "*"
-dash-core-components = "*"
-dash-html-components = "*"
-opencv_python = "*"
-numpy = "*"
-gunicorn = "*"
-dash-bootstrap-components = "*"
+dash = "~=2.18"
+dash-core-components = "~=2.0"
+dash-html-components = "~=2.0"
+opencv-python = "~=4.10"
+numpy = "~=2.1"
+gunicorn = "~=23.0"
+dash-bootstrap-components = "~=1.6"
 
 [dev-packages]
 pylint = "*"
 ipykernel = "*"
-matplotlib = "*"
+matplotlib = "~=3.9"
 
 [requires]
 python_version = "3.12"

@@ -3,8 +3,8 @@
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Jetbrains+Mono&pause=1000&width=435&lines=Play+with+hybrid+images;Create+your+own+one;Tweak+the+parameters;Understand+the+concept)
 
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/ptrlx/hybrid-image-playground)
+![GitHub Pipenv locked Python version dash](https://img.shields.io/github/pipenv/locked/dependency-version/ptrlx/hybrid-image-playground/dash)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![GitHub Pipenv locked Python version dash](https://img.shields.io/github/pipenv/locked/python-version/ptrlx/hybrid-image-playground/dash)
 ![Github Action Status](https://img.shields.io/github/actions/workflow/status/ptrlx/hybrid-image-playground/build.yml)
 [![Docker Image Size](https://img.shields.io/docker/image-size/ptrlx/hybrid-image-playground?label=Image%20Size&logo=docker)](https://hub.docker.com/r/ptrlx/hybrid-image-playground)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ptrlx/hybrid-image-playground?label=Pulls&logo=docker)](https://hub.docker.com/r/ptrlx/hybrid-image-playground)
