@@ -9,7 +9,7 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/ptrlx/hybrid-image-playground?label=Image%20Size&logo=docker)](https://hub.docker.com/r/ptrlx/hybrid-image-playground)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ptrlx/hybrid-image-playground?label=Pulls&logo=docker)](https://hub.docker.com/r/ptrlx/hybrid-image-playground)
 
-![](assets/2024-11-22-00-40-54.png)
+![Demo](assets/demo.gif)
 
 ## Run the docker image
 
@@ -35,6 +35,10 @@ pipenv run python src/main.py
 ```
 
 * Open your browser and go to <http://localhost:8300>
+
+## Jupyter Notebook
+
+There is also a Jupyter Notebook available to play with the hybrid images. See [main.ipynb](jupyter/main.ipynb).
 
 ## Preprocessing - resizing and alignment
 
