@@ -134,7 +134,7 @@ def add_callbacks(app):
         [
             Input("upload-image-1", "contents"),
             Input("image-size", "value"),
-            Input("cf-slider", "value"),
+            Input("cf-slider-lp", "value"),
             Input("is-scale-independent-cf", "value"),
             Input("filter-mode", "value"),
         ],
@@ -156,7 +156,7 @@ def add_callbacks(app):
         [
             Input("upload-image-2", "contents"),
             Input("image-size", "value"),
-            Input("cf-slider", "value"),
+            Input("cf-slider-hp", "value"),
             Input("is-scale-independent-cf", "value"),
             Input("filter-mode", "value"),
         ],
@@ -208,3 +208,15 @@ def add_callbacks(app):
         if n:
             return not is_open
         return is_open
+
+    @app.callback(
+        [Output("cf-slider-hp", "value"), Output("cf-slider-hp", "disabled")],
+        [
+            Input("cf-slider-lp", "value"),
+            Input("cf-slider-hp", "value"),
+            Input("is-locked-cf", "value"),
+        ],
+    )
+    def update_cf_slider_hp(cf_lp, cf_hp, is_locked_cf_arr):
+        is_locked = "lock-cf" in is_locked_cf_arr
+        return (cf_lp if is_locked else cf_hp), is_locked

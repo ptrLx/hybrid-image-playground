@@ -13,10 +13,12 @@
 
 ## Run the docker image
 
-```bash
-docker pull ptrlx/hybrid-image-playground
-docker run -it --rm -p 8080:80 ptrlx/hybrid-image-playground
-```
+* Pull and run the docker image
+
+  ```bash
+  docker pull ptrlx/hybrid-image-playground
+  docker run -it --rm -p 8080:80 ptrlx/hybrid-image-playground
+  ```
 
 * Open your browser and go to <http://localhost:8080>
 
@@ -29,16 +31,18 @@ docker run -it --rm -p 8080:80 ptrlx/hybrid-image-playground
 
 ###### Install and run the project
 
-```bash
-pipenv install
-pipenv run python src/main.py
-```
+* Install and run the project
+
+  ```bash
+  pipenv install
+  pipenv run python src/main.py
+  ```
 
 * Open your browser and go to <http://localhost:8300>
 
 ## Jupyter Notebook
 
-There is also a Jupyter Notebook available to play with the hybrid images. See [main.ipynb](jupyter/main.ipynb).
+There is also a [Jupyter Notebook](jupyter/main.ipynb) available to play with Hybrid Images.
 
 ## Preprocessing - resizing and alignment
 

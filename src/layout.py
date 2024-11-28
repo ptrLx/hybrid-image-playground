@@ -100,24 +100,76 @@ __filter_controls = dbc.Row(
                 html.H6("Cut-off Frequency"),
                 html.Div(
                     [
-                        dcc.Slider(
-                            1,
-                            100,
-                            1,
-                            value=25,
-                            marks=None,
-                            id="cf-slider",
-                            tooltip={
-                                "placement": "bottom",
-                                "always_visible": True,
+                        html.Div(
+                            [
+                                html.P("Low Pass"),
+                                dcc.Slider(
+                                    1,
+                                    100,
+                                    1,
+                                    value=25,
+                                    marks=None,
+                                    id="cf-slider-lp",
+                                    tooltip={
+                                        "placement": "bottom",
+                                        "always_visible": True,
+                                    },
+                                ),
+                            ],
+                            style={
+                                "width": "auto",
+                                "minWidth": "300px",
+                                "padding-bottom": "10px",
+                            },
+                        ),
+                        html.Div(
+                            [
+                                html.P("High Pass"),
+                                dcc.Slider(
+                                    1,
+                                    100,
+                                    1,
+                                    value=25,
+                                    marks=None,
+                                    id="cf-slider-hp",
+                                    tooltip={
+                                        "placement": "bottom",
+                                        "always_visible": True,
+                                    },
+                                ),
+                            ],
+                            style={
+                                "width": "auto",
+                                "minWidth": "300px",
+                                "padding-bottom": "10px",
                             },
                         ),
                     ],
                     style={
-                        "width": "auto",
-                        "minWidth": "300px",
-                        "padding-bottom": "10px",
+                        "display": "flex",
+                        "flexDirection": "row",
                     },
+                ),
+                html.Div(
+                    [
+                        dbc.Checklist(
+                            [
+                                {
+                                    "label": " Lock Low/High Frequency Cutoff",
+                                    "value": "lock-cf",
+                                }
+                            ],
+                            value=["lock-cf"],
+                            id="is-locked-cf",
+                            inline=True,
+                        ),
+                        dbc.Tooltip(
+                            "Lock the low and high frequency cutoffs to the same value.",
+                            target="is-locked-cf",
+                            placement="bottom",
+                        ),
+                    ],
+                    style={"textDecoration": "underline", "color": "white"},
                 ),
                 html.Div(
                     [
